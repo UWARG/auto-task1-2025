@@ -94,13 +94,14 @@ def init_mavlink():
     return conn
 
 
-def main():
-    global frame
-    
+def main():    
     cam      = init_camera()
     detector = init_detector()
     conn     = init_mavlink()
     
+    cv2.namedWindow("preview", cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty("preview", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
     tasks = threading.Thread(target=dispatcher.task_dispatcher, args=(detector,conn), daemon=True)
     tasks.start()
     
@@ -108,7 +109,7 @@ def main():
         frame_ = cam.capture_array()
         
         with globals.frame_lock:
-            frame = copy.deepcopy(frame_)
+            globals.frame = copy.deepcopy(frame_)
             
         with globals.detections_lock:
             # should be a deepcopy, but cv2.keypoint is not pickleable
