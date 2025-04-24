@@ -33,12 +33,12 @@ def detection_task(detector, conn):
     
     # === grab latest camera frame ===
     with globals.frame_lock:
-        frame_snapshot = copy.deepcopy(globals.frame)
-    if frame_snapshot is None:
+        frame_ = copy.deepcopy(globals.frame)
+    if frame_ is None:
         return
     
     # === perform blob detection ===
-    gray = cv2.cvtColor(frame_snapshot, cv2.COLOR_RGB2GRAY)
+    gray = cv2.cvtColor(frame_, cv2.COLOR_RGB2GRAY)
     blur = cv2.GaussianBlur(gray, (5,5), 0)
     _, binary = cv2.threshold(blur, 127, 255, cv2.THRESH_BINARY)
     detections_ = detector.detect(binary)
