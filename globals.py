@@ -8,3 +8,6 @@ detections = ()
 
 new_poi = False
 poi_list = []
+
+cluster_list = []
+points_in_cluster = []
