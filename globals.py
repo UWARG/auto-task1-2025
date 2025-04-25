@@ -11,3 +11,5 @@ poi_list = []
 
 cluster_list = []
 points_in_cluster = []
+DIST_ERROR = 0.0005
+MIN_POINTS_PER_CLUSTER = 3

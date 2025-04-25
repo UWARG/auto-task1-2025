@@ -8,7 +8,6 @@ def cluster_estimation():
         lon_diff = abs(point1[1] - point2[1])
         return math.sqrt(lat_diff ** 2 + lon_diff ** 2)
     
-    distance_error = 0.0005
     cur_point_num = 0
 
     # Create cluster list
@@ -18,7 +17,7 @@ def cluster_estimation():
         in_cluster = False
         for cluster_point in globals.cluster_list:
             dist = get_distance(cur_point, cluster_point)
-            if (dist <= distance_error):
+            if (dist <= globals.DIST_ERROR):
                 globals.points_in_cluster[cluster_point_num] += 1
                 in_cluster = True
 
@@ -34,7 +33,7 @@ def cluster_estimation():
     # Remove clusters with less than 3 points
     i = 0
     while (i < len(globals.cluster_list)):
-        if (globals.points_in_cluster[i] < 3):
+        if (globals.points_in_cluster[i] < globals.MIN_POINTS_PER_CLUSTER):
             del globals.cluster_list[i]
             del globals.points_in_cluster[i]
         else:
