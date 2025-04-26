@@ -39,6 +39,10 @@ def cluster_estimation():
         else:
             i += 1
 
-def kml_creation_task():
+def kml_creation_task(conn):
 
     cluster_estimation()
+
+    for cluster in cluster_list):
+        severity = mavutil.mavlink.MAV_SEVERITY_NOTICE
+        conn.mav.statustext_send(severity, cluster.encode('uft-8'))

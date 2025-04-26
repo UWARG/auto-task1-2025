@@ -90,3 +90,4 @@ def detection_task(detector, conn):
         poi_lat, poi_lon, _ = pm.ecef2geodetic(drone_x + P_ecef[0], drone_y + P_ecef[1], drone_z + P_ecef[2])
         globals.poi_list.append((poi_lat, poi_lon, 0))
         globals.new_poi = True
+        print(f"{poi_lat}, {poi_lon}")

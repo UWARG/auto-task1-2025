@@ -10,15 +10,21 @@ def task_dispatcher(detector, conn):
             if msg:
                 return msg
             await asyncio.sleep(0.05)
+    
+    async def get_drone_telemetry():
+        rc = await wait_for_msg('RC_CHANNELS')
+        return (rc)
+        
+    
 
     while True:
-        rc = wait_for_msg('RC_CHANNELS')
+        rc = asyncio.run(get_drone_telemetry())
 
-        if (rc.chan10_raw < 1300):
+        if (rc.chan10_raw < 1200):
             # idle
             pass
         elif (rc.chan10_raw > 1700):
-            kml.kml_creation_task()
+            kml.kml_creation_task(conn)
         else:
             detection.detection_task(detector, conn)
         
