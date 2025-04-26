@@ -60,7 +60,7 @@ def init_mavlink():
             mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
             0,
             mavutil.mavlink.MAVLINK_MSG_ID_ATTITUDE,
-            250000,
+            200000,
             0,
             0,
             0,
@@ -80,7 +80,7 @@ def init_mavlink():
             mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
             0,
             mavutil.mavlink.MAVLINK_MSG_ID_GLOBAL_POSITION_INT,
-            250000,
+            200000,
             0,
             0,
             0,
@@ -100,7 +100,7 @@ def init_mavlink():
             mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
             0,
             mavutil.mavlink.MAVLINK_MSG_ID_RC_CHANNELS,
-            250000,
+            200000,
             0,
             0,
             0,
@@ -110,7 +110,6 @@ def init_mavlink():
         conn.mav.send(msg)
     else:
         print('RC_CHANNELS message received!')
-        print(f"RC: {test.chan10_raw}")
     
     return conn
 

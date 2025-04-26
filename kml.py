@@ -1,8 +1,10 @@
+from pymavlink import mavutil
 import globals
 import math
+import time
 
-def cluster_estimation():
-        
+
+def cluster_estimation():      
     def get_distance(point1, point2):
         lat_diff = abs(point1[0] - point2[0])
         lon_diff = abs(point1[1] - point2[1])
@@ -39,10 +41,15 @@ def cluster_estimation():
         else:
             i += 1
 
+
 def kml_creation_task(conn):
+    if globals.new_poi:
+        cluster_estimation()
+        globals.new_poi = False
 
-    cluster_estimation()
-
-    for cluster in cluster_list):
-        severity = mavutil.mavlink.MAV_SEVERITY_NOTICE
-        conn.mav.statustext_send(severity, cluster.encode('uft-8'))
+    now = time.time()
+    if now - globals.last_kml_send_time > globals.KML_SENDING_DELAY:
+        globals.last_kml_send_time = now
+        for cluster in globals.cluster_list:
+            severity = mavutil.mavlink.MAV_SEVERITY_NOTICE
+            conn.mav.statustext_send(severity, cluster.encode('uft-8'))
