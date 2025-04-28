@@ -13,24 +13,7 @@ CAM_MATRIX = np.array([[1665.11573,          0, 1128.21945],
                        [         0,          0,          1]], dtype=np.float32)
 
 
-def detection_task(detector, conn):
-    # === asyncio gather ATTITUDE and GLOBAL_POSITION_INT ===
-    async def wait_for_msg(msg_type):
-        while True:
-            msg = conn.recv_match(type=msg_type, blocking=False)
-            if msg:
-                return msg
-            await asyncio.sleep(0.05)
-    
-    async def get_drone_telemetry():
-        attitude, position = await asyncio.gather(
-            wait_for_msg('ATTITUDE'),
-            wait_for_msg('GLOBAL_POSITION_INT')
-        )
-        return (attitude, position)
-        
-    attitude, position = asyncio.run(get_drone_telemetry())
-    
+def detection_task(attitude, position, detector):
     # === grab latest camera frame ===
     with globals.frame_lock:
         frame_ = copy.deepcopy(globals.frame)
@@ -84,7 +67,7 @@ def detection_task(detector, conn):
         P_ecef = R_ned_to_ecef @ P_ned.T
         
         # convert GPS from LLA to ECEF
-        drone_x, drone_y, drone_z = pm.geodetic2ecef(position.lat / 1e7, position.lon / 1e7, position.alt / 10e3)
+        drone_x, drone_y, drone_z = pm.geodetic2ecef(position.lat / 1e7, position.lon / 1e7, position.alt / 1e3)
 
         # add drone vector and POI vector
         poi_lat, poi_lon, _ = pm.ecef2geodetic(drone_x + P_ecef[0], drone_y + P_ecef[1], drone_z + P_ecef[2])

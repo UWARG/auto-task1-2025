@@ -60,7 +60,7 @@ def init_mavlink():
             mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
             0,
             mavutil.mavlink.MAVLINK_MSG_ID_ATTITUDE,
-            250000,
+            200000,
             0,
             0,
             0,
@@ -80,7 +80,7 @@ def init_mavlink():
             mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
             0,
             mavutil.mavlink.MAVLINK_MSG_ID_GLOBAL_POSITION_INT,
-            250000,
+            200000,
             0,
             0,
             0,
@@ -90,6 +90,26 @@ def init_mavlink():
         conn.mav.send(msg)
     else:
         print('GLOBAL_POSITION_INT message received!')
+
+    test = conn.recv_match(type='RC_CHANNELS', blocking=True, timeout=3)
+    if not test:
+        print('No RC_CHANNELS message received. Requesting...')
+        msg = conn.mav.command_long_encode(
+            conn.target_system,
+            conn.target_component,
+            mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
+            0,
+            mavutil.mavlink.MAVLINK_MSG_ID_RC_CHANNELS,
+            200000,
+            0,
+            0,
+            0,
+            0,
+            0
+        )
+        conn.mav.send(msg)
+    else:
+        print('RC_CHANNELS message received!')
     
     return conn
 
