@@ -67,7 +67,7 @@ def detection_task(attitude, position, detector):
         P_ecef = R_ned_to_ecef @ P_ned.T
         
         # convert GPS from LLA to ECEF
-        drone_x, drone_y, drone_z = pm.geodetic2ecef(position.lat / 1e7, position.lon / 1e7, position.alt / 10e3)
+        drone_x, drone_y, drone_z = pm.geodetic2ecef(position.lat / 1e7, position.lon / 1e7, position.alt / 1e3)
 
         # add drone vector and POI vector
         poi_lat, poi_lon, _ = pm.ecef2geodetic(drone_x + P_ecef[0], drone_y + P_ecef[1], drone_z + P_ecef[2])

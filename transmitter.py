@@ -42,7 +42,7 @@ def cluster_estimation():
             i += 1
 
 
-def kml_creation_task(conn):
+def transmit_to_ground_station(conn):
     if globals.new_poi:
         cluster_estimation()
         globals.new_poi = False

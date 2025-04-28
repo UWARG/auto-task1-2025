@@ -1,6 +1,6 @@
 import asyncio
 import detection
-import kml
+import transmitter
 
 
 def task_dispatcher(detector, conn):
@@ -26,8 +26,8 @@ def task_dispatcher(detector, conn):
             # idle
             pass
         elif (rc.chan10_raw > 1700):
-            # generate kml file
-            kml.kml_creation_task(conn)
+            # transmit to ground station after clustering
+            transmitter.transmit_to_ground_station(conn)
         else:
             # detect hotspots
             detection.detection_task(attitude, position, detector)
