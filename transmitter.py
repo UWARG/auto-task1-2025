@@ -51,5 +51,6 @@ def transmit_to_ground_station(conn):
     if now - globals.last_kml_send_time > globals.KML_SENDING_DELAY:
         globals.last_kml_send_time = now
         for cluster in globals.cluster_list:
-            severity = mavutil.mavlink.MAV_SEVERITY_NOTICE
-            conn.mav.statustext_send(severity, cluster.encode('uft-8'))
+            statustext = f"Target: {cluster[0]:.7f}, {cluster[1]:.7f}"
+            severity = mavutil.mavlink.MAV_SEVERITY_INFO
+            conn.mav.statustext_send(severity, statustext.encode('uft-8'))
