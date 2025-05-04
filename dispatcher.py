@@ -22,10 +22,10 @@ def task_dispatcher(detector, conn):
     while True:
         rc, attitude, position = asyncio.run(get_drone_telemetry())
 
-        if (rc.chan10_raw < 1200):
+        if (rc.chan7_raw < 1200):
             # idle
             pass
-        elif (rc.chan10_raw > 1700):
+        elif (rc.chan7_raw > 1700):
             # transmit to ground station after clustering
             transmitter.transmit_to_ground_station(conn)
         else:
