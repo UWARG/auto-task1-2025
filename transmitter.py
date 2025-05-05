@@ -10,6 +10,7 @@ def cluster_estimation():
         for point in cluster_points:
             lat_sum += point[0]
             lon_sum += point[1]
+        return (lat_sum/len(cluster_points), lon_sum/len(cluster_points))
     
     def get_distance(point1, point2):
         lat_diff = abs(point1[0] - point2[0])
