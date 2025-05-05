@@ -53,4 +53,4 @@ def transmit_to_ground_station(conn):
         for cluster in globals.cluster_list:
             statustext = f"Target: {cluster[0]:.7f}, {cluster[1]:.7f}"
             severity = mavutil.mavlink.MAV_SEVERITY_INFO
-            conn.mav.statustext_send(severity, statustext.encode('uft-8'))
+            conn.mav.statustext_send(severity, statustext.encode('utf-8'))
