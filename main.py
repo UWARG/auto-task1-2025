@@ -10,7 +10,7 @@ import threading
 def init_camera():
     cam = Picamera2()
     
-    cam_res = {"size": (2304,1296)}
+    cam_res = {"size": (2304,1296)}  # 640, 480
     cam_controls = {"AnalogueGain": 8.0, "AfMode": 0, "LensPosition": 0.0, "ExposureTime": 10}
     
     cam_cfg = cam.create_still_configuration(main=cam_res, controls=cam_controls)
@@ -46,7 +46,7 @@ def init_detector():
     
 
 def init_mavlink():
-    conn = mavutil.mavlink_connection('/dev/ttyAMA0', baud=57600)
+    conn = mavutil.mavlink_connection('/dev/ttyAMA0', baud=57600, source_component=191, source_system=1)
     print('Waiting for Mavlink connection on UART...')
     conn.wait_heartbeat()
     print('Mavlink heartbeat received!')
