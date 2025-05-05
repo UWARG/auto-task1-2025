@@ -3,8 +3,14 @@ import globals
 import math
 import time
 
-
-def cluster_estimation():      
+def cluster_estimation():
+    def cluster_average(cluster_points):
+        lat_sum = 0
+        lon_sum = 0
+        for point in cluster_points:
+            lat_sum += point[0]
+            lon_sum += point[1]
+    
     def get_distance(point1, point2):
         lat_diff = abs(point1[0] - point2[0])
         lon_diff = abs(point1[1] - point2[1])
@@ -17,9 +23,10 @@ def cluster_estimation():
         # Check point against each current cluster
         cluster_point_num = 0
         in_cluster = False
-        for cluster_point in globals.cluster_list:
-            dist = get_distance(cur_point, cluster_point)
+        for cluster_points in globals.cluster_list:
+            dist = get_distance(cur_point, cluster_points[0])
             if (dist <= globals.DIST_ERROR):
+                cluster_points.append(cur_point)
                 globals.points_in_cluster[cluster_point_num] += 1
                 in_cluster = True
 
@@ -27,7 +34,7 @@ def cluster_estimation():
 
         # If not in any clusters, make new cluster
         if (not in_cluster):
-            globals.cluster_list.append(cur_point)
+            globals.cluster_list.append((cur_point))
             globals.points_in_cluster.append(1)
 
         cur_point_num += 1
@@ -39,6 +46,7 @@ def cluster_estimation():
             del globals.cluster_list[i]
             del globals.points_in_cluster[i]
         else:
+            globals.averaged_cluster_list.append(cluster_average(globals.cluster_list[i]))
             i += 1
 
 
@@ -50,7 +58,7 @@ def transmit_to_ground_station(conn):
     now = time.time()
     if now - globals.last_kml_send_time > globals.KML_SENDING_DELAY:
         globals.last_kml_send_time = now
-        for cluster in globals.cluster_list:
+        for cluster in globals.averaged_cluster_list:
             statustext = f"Target: {cluster[0]:.7f}, {cluster[1]:.7f}"
             severity = mavutil.mavlink.MAV_SEVERITY_INFO
             conn.mav.statustext_send(severity, statustext.encode('utf-8'))
