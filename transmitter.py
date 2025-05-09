@@ -25,7 +25,7 @@ def cluster_estimation():
         cluster_point_num = 0
         in_cluster = False
         for cluster_points in globals.cluster_list:
-            dist = get_distance(cur_point, cluster_points[0])
+            dist = get_distance(cur_point, cluster_points[-1])
             if (dist <= globals.DIST_ERROR):
                 cluster_points.append(cur_point)
                 globals.points_in_cluster[cluster_point_num] += 1
@@ -35,7 +35,7 @@ def cluster_estimation():
 
         # If not in any clusters, make new cluster
         if (not in_cluster):
-            globals.cluster_list.append((cur_point))
+            globals.cluster_list.append([cur_point])
             globals.points_in_cluster.append(1)
 
         cur_point_num += 1
